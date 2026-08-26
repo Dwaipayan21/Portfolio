@@ -91,7 +91,7 @@ const Welcome = () => {
         </h1>
 
         <div className="small-screen">
-            <p>
+            <p className='text-black'>
                 This Portfolio is designed for 
                 desktop/tablet screens only
             </p>
