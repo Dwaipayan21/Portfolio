@@ -7,7 +7,9 @@ import { Tooltip } from 'react-tooltip';
 const Dock = () => {
     const dockRef = useRef(null);
 
-    const toggleApp = (app) => {};
+    const toggleApp = (app) => {
+        //todo implement open window logic
+    };
 
     useGSAP(() => {
         const dock = dockRef.current;
