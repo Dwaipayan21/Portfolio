@@ -3,8 +3,11 @@ import { navIcons } from '#constants';
 import dayjs from 'dayjs';
 import React from 'react'
 import { ThemeToggle } from './theme-toggle';
+import useWindowStore from '@/store/window';
 
 const Navbar = () => {
+    const { openWindow } = useWindowStore();
+
   return (
     <nav className="flex items-center justify-between px-6 py-2
      bg-white/70 dark:bg-neutral-900/90 text-black 
@@ -16,8 +19,8 @@ const Navbar = () => {
             <p className='font-bold'>Dwaipayan's Portfolio</p>
 
             <ul className='flex gap-4'>
-                {navLinks.map(({ id, name})=>(
-                    <li key={id}>
+                {navLinks.map(({ id, name, type})=>(
+                    <li key={id} onClick={() => openWindow(type)}>
                         <p className='text-sm text-black/80 dark:text-white/80
                             dark:hover:text-white dark:text-white'>{name}</p>
                     </li>

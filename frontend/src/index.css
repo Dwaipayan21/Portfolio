@@ -122,11 +122,11 @@ body {
     }
 
     .minimize {
-      @apply size-3.5 rounded-full bg-[#ffc030];
+      @apply size-3.5 rounded-full bg-[#ffc030] cursor-pointer;
     }
 
     .maximize {
-      @apply size-3.5 rounded-full bg-[#2acb42];
+      @apply size-3.5 rounded-full bg-[#2acb42] cursor-pointer;
     }
   }
 
@@ -232,7 +232,11 @@ body {
     }
 
     h3 {
-      @apply text-xl font-semibold;
+      @apply text-xl font-semibold text-gray-800;
+    }
+
+    p {
+      @apply text-sm text-gray-600;
     }
 
     ul {
@@ -337,10 +341,18 @@ body {
 
         .active {
           @apply bg-blue-100 text-blue-700;
+
+          p {
+            @apply text-blue-700;
+          }
         }
 
         .not-active {
           @apply text-gray-700 hover:bg-gray-200;
+
+          p {
+            @apply text-gray-700;
+          }
         }
 
         li {
@@ -360,7 +372,7 @@ body {
         }
 
         p {
-          @apply text-sm text-center font-medium w-40;
+          @apply text-sm text-center font-medium w-40 text-gray-700;
         }
       }
     }

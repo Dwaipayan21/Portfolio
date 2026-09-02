@@ -7,7 +7,7 @@ import React, { useLayoutEffect, useRef } from 'react'
 const WindowWrapper = (Component, windowKey) => {
     const Wrapped = (props) => {
         const { focusWindow, windows} = useWindowStore();
-        const { isOpen, zIndex} = windows[windowKey];
+        const { isOpen,isMinimized, zIndex} = windows[windowKey];
         const ref = useRef(null);
 
         useGSAP(() => {
@@ -23,9 +23,9 @@ const WindowWrapper = (Component, windowKey) => {
 
         useGSAP(() => {
             const element = ref.current;
-            if(!element || !isOpen) return;
+            if(!element || !isOpen || isMinimized) return;
 
-            element.style.display = "block;"
+            // element.style.display = "block;"
 
             //animation
             gsap.fromTo(
@@ -33,14 +33,14 @@ const WindowWrapper = (Component, windowKey) => {
                 { scale: 0.0 , opacity:0, y:40},
                 { scale: 1, opacity: 1, y: 0, duration: 0.5, ease: "power3.out"},
             )
-        },[isOpen]);
+        },[isOpen, isMinimized]);
 
         useLayoutEffect(() => {
             const element = ref.current;
             if(!element) return;
 
-            element.style.display = isOpen ? 'block' : "none";
-        },[isOpen])
+            element.style.display = (isOpen && !isMinimized) ? 'block' : "none";
+        },[isOpen, isMinimized])
 
         return (
             <section 

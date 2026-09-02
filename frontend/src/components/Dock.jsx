@@ -6,7 +6,7 @@ import React, { useRef } from 'react';
 import { Tooltip } from 'react-tooltip';
 
 const Dock = () => {
-    const { openWindow, closeWindow, windows } = useWindowStore();
+    const { openWindow, closeWindow, windows, restoreWindow } = useWindowStore();
     const dockRef = useRef(null);
 
     const toggleApp = (app) => {
@@ -21,6 +21,8 @@ const Dock = () => {
 
         if(window.isOpen) {
             closeWindow(app.id);
+        }else if(window.isMinimized){
+            restoreWindow(app.id);
         }else{
             openWindow(app.id);
         }
