@@ -157,6 +157,8 @@ const socials = [
   },
 ];
 
+//location for the photos app 
+
 const photosLinks = [
   {
     id: 1,
@@ -188,20 +190,32 @@ const photosLinks = [
 const gallery = [
   {
     id: 1,
-    img: "/images/gal1.png",
+    img: "/images/G1.jpg",
   },
   {
     id: 2,
-    img: "/images/gal2.png",
+    img: "/images/G2.jpg",
   },
   {
     id: 3,
-    img: "/images/gal3.png",
+    img: "/images/G3.jpg",
   },
   {
     id: 4,
-    img: "/images/gal4.png",
+    img: "/images/G4.jpg",
   },
+  // {
+  //   id: 5,
+  //   img: "/images/G5.jpg",
+  // },
+  // {
+  //   id: 6,
+  //   img: "/images/G4.jpg",
+  // },
+  // {
+  //   id: 7,
+  //   img: "/images/G4.jpg",
+  // },
 ];
 
 export {
@@ -501,6 +515,7 @@ const WINDOW_CONFIG = {
   terminal: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
   txtfile: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
   imgfile: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
+  adminLogin: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null},
 };
 
 export { INITIAL_Z_INDEX, WINDOW_CONFIG };

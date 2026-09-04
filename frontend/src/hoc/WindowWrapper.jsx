@@ -16,6 +16,7 @@ const WindowWrapper = (Component, windowKey) => {
 
             const [instance] = Draggable.create(element,{
                 onPress: () => focusWindow(windowKey),//only draggable the winow which is pressed
+                ignore: 'input, textarea, button, select, option',
             });
 
             return () => instance.kill();
@@ -46,7 +47,10 @@ const WindowWrapper = (Component, windowKey) => {
             <section 
                 id={windowKey} 
                 ref={ref} 
-                style={{ zIndex}}
+                style={{ 
+                    zIndex,
+                    width: windowKey === 'adminLogin' ? '380px' : undefined,
+                }}
             >
                 <Component {...props}/>
             </section>

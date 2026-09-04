@@ -4,9 +4,11 @@ import dayjs from 'dayjs';
 import React from 'react'
 import { ThemeToggle } from './theme-toggle';
 import useWindowStore from '@/store/window';
+import { useAuth } from '@/context/AuthContext';
 
 const Navbar = () => {
     const { openWindow } = useWindowStore();
+    const {isAdmin, authLoading } = useAuth();
 
   return (
     <nav className="flex items-center justify-between px-6 py-2
@@ -33,11 +35,20 @@ const Navbar = () => {
             {/* theme toggle */}
             <ThemeToggle />
             <ul className='flex items-center gap-3'>
-                {navIcons.map(({ id, img})=> (
-                    <li key={id}>
-                        <img src={img} className='icon-hover dark:invert' />
-                    </li>
-                ))}
+                {navIcons.map(({ id, img})=> {
+                    if(id === 3 && authLoading) return null;
+
+                    if(id === 3 && !isAdmin) return null;
+
+                    return(
+                        <li key = {id}>
+                            <img 
+                                src={img}
+                                className='icon-hover dark:invert cursor-pointer'
+                            />
+                        </li>
+                    );
+                })}
             </ul>
 
             <time className="text-sm text-black dark:text-white">
