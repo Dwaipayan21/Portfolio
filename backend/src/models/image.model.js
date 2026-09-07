@@ -8,7 +8,7 @@ const imageSchema = new mongoose.Schema(
     },
     category: {
       type: String,
-      enum: ["Library", "Memories", "Places", "People","Favourites"],
+      enum: ["Memories", "Places", "People","Favourites"],
       required: true,
     },
     title: {

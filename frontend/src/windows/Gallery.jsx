@@ -1,76 +1,111 @@
 import WindowControl from '@/components/WindowControl';
 import { photosLinks } from '@/constants';
 import useContentStore from '@/store/contentStore';
-import WindowWrapper from '@/hoc/WindowWrapper'
+import WindowWrapper from '@/hoc/WindowWrapper';
 import useWindowStore from '@/store/window';
-import clsx from 'clsx';
 import { Mail, Search } from 'lucide-react';
-import React, { useState } from 'react'
+import { useState } from 'react';
 
 const Gallery = () => {
-    const {openWindow} = useWindowStore();
+    const { openWindow } = useWindowStore();
     const gallery = useContentStore((state) => state.gallery);
+    const [selectedCategory, setSelectedCategory] = useState('library');
 
-    console.log('gallery: ', gallery);
+    const filteredGallery = gallery.filter((item) => {
+    if (selectedCategory === 'Library') {
+        return true;
+    }
 
-  return (
-    <>
-        <div id='window-header'>
-            <WindowControl target='photos'/>
+    return item.category === selectedCategory;
+});
 
-            <div className='flex w-full justify-end items-center gap-3 text-gray-500'>
-                <Mail className='icon'/>
-                <Search className='icon' />
-            </div>
-        </div>   
+    console.log(`gallery : ${gallery}`);
 
-        <div className='flex w-full'>
-            <div className='sidebar'>
-                <h2>Photos</h2>
-                <ul>
-                    {photosLinks.map(({id, icon, title }) => (
-                        <li key={id}>
-                            <img 
-                                src={icon}
-                                alt={title}
-                                className='size-4'
-                            />
-                            {title}
-                        </li>
-                    ))}
-                </ul>
+    return (
+        <div className="h-full w-full flex flex-col overflow-hidden">
+
+            {/* HEADER */}
+            <div
+                id="window-header"
+                className="shrink-0"
+            >
+                <WindowControl target="photos" />
+
+                <div className="flex w-full justify-end items-center gap-3 text-gray-500">
+                    <Mail className="icon" />
+                    <Search className="icon" />
+                </div>
             </div>
 
-            <div className='gallery'>
-                <ul>
-                    {gallery.map((item) => {
-                        const id = item._id;
-                        const img = item.image?.url;
+            {/* MAIN CONTENT */}
+            <div className="flex flex-1 min-h-0 w-full overflow-hidden">
 
-                        return (
+                {/* SIDEBAR */}
+                <div className="sidebar shrink-0">
+                    <h2>Photos</h2>
+
+                    <ul>
+                        {photosLinks.map(({ id, icon, title }) => (
                             <li 
                                 key={id}
-                                onClick={() => 
-                                    openWindow('imgfile', {
-                                        id, 
-                                        name: item.title ?? "Gallery image",
-                                        icon: "/images/image.png",
-                                        kind: "file",
-                                        fileType: "img",
-                                        imageUrl: img,
-                                    })
-                                }    
+                                onClick={() => setSelectedCategory(id)}
+                                className={selectedCategory === id ? 'active' : ''}
                             >
-                                <img src={img} alt={item.title ?? `Gallery image ${id}`} />
+                                <img
+                                    src={icon}
+                                    alt={title}
+                                    className="size-4"
+                                />
+                                {title}
                             </li>
-                        );
-                    })}
-                </ul>
+                        ))}
+                    </ul>
+                </div>
+
+                {/* GALLERY - SCROLLS */}
+                <div className="gallery flex-1 min-h-0 overflow-y-auto scrollbar-hide">
+                    <ul>
+                        {filteredGallery.map((item) => {
+                            const id = item._id;
+                            const img = item.image?.url;
+
+                            return (
+                                <li
+                                    key={id}
+                                    onClick={() =>
+                                        openWindow('imgfile', {
+                                            id,
+                                            name: item.title ?? 'Gallery image',
+                                            icon: '/images/image.png',
+                                            kind: 'file',
+                                            fileType: 'img',
+                                            imageUrl: img,
+                                        })
+                                    }
+                                >
+                                    <img
+                                        src={img}
+                                        alt={
+                                            item.title ??
+                                            `Gallery image ${id}`
+                                        }
+                                    />
+                                </li>
+                            );
+                        })}
+                    </ul>
+
+                    {/* EMPTY CATEGORY */}
+                    {filteredGallery.length === 0 && (
+                        <div className='flex h-full items-center justify-center text-gray-400'>
+                            No Photos Found
+                        </div>
+                    )}
+                </div>
             </div>
         </div>
-    </>
-  )
-}
+    );
+};
 
 const GalleryWindow = WindowWrapper(Gallery, 'photos');
 

@@ -161,27 +161,27 @@ const socials = [
 
 const photosLinks = [
   {
-    id: 1,
+    id: "Library",
     icon: "/icons/gicon1.svg",
     title: "Library",
   },
   {
-    id: 2,
+    id: "Memories",
     icon: "/icons/gicon2.svg",
     title: "Memories",
   },
   {
-    id: 3,
+    id: "Places",
     icon: "/icons/file.svg",
     title: "Places",
   },
   {
-    id: 4,
+    id: "People",
     icon: "/icons/gicon4.svg",
     title: "People",
   },
   {
-    id: 5,
+    id: "Favourites",
     icon: "/icons/gicon5.svg",
     title: "Favorites",
   },

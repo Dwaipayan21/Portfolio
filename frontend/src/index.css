@@ -310,7 +310,7 @@ body {
     }
 
     .body {
-      @apply flex flex-1 min-h-0; /* min-h-0 lets children scroll instead of pushing window taller */
+      @apply flex flex-1 min-h-0 overflow-hidden; /* min-h-0 lets children scroll instead of pushing window taller */
     }
 
     .sidebar {
@@ -321,11 +321,13 @@ body {
       }
 
       ul {
+        @apply flex flex-col;
+
         li {
-          @apply flex space-y-1 items-center gap-2 px-3 py-2 rounded-md cursor-pointer transition-colors;
+          @apply flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer transition-colors text-sm;
 
           img {
-            @apply w-4;
+            @apply w-4 h-4 flex-none;
           }
 
           p {
@@ -346,8 +348,16 @@ body {
     }
 
     .gallery {
-      @apply p-5 flex-1 min-w-0 overflow-y-auto;
+      @apply p-5 flex-1 min-w-0 overflow-y-auto overflow-x-hidden;
 
+      /* hide scrollbar */
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+
+      -webkit-scrollbar {
+        display: none;
+      }
+      
       ul {
         columns: 2;
         column-gap: 0.625rem;
@@ -466,6 +476,17 @@ body {
         }
       }
     }
+  }
+}
+
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;     /* Firefox */
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;             /* Chrome, Safari */
   }
 }
 
