@@ -41,7 +41,10 @@ const Navbar = () => {
                     if(id === 3 && !isAdmin) return null;
 
                     return(
-                        <li key = {id}>
+                        <li 
+                            key = {id}
+                            onClick={() => id ===3 && openWindow('admin')}    
+                        >
                             <img 
                                 src={img}
                                 className='icon-hover dark:invert cursor-pointer'

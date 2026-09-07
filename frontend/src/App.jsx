@@ -16,6 +16,7 @@ import Gallery from './windows/Gallery'
 import { fetchProjects } from './lib/portfolioApi'
 import useContentStore from './store/contentStore'
 import AdminLoginWindow from './windows/AdminLogin'
+import AdminDashboardWindow from './windows/AdminDashboard'
 // import TerminalWindow from './windows/terminal'
 gsap.registerPlugin(Draggable);
 
@@ -47,6 +48,7 @@ const App = () => {
         <Home />
         <Gallery />
         <AdminLoginWindow/>
+        <AdminDashboardWindow />
       </main>
   )
 }

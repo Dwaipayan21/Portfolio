@@ -11,7 +11,10 @@ const imageSchema = new mongoose.Schema(
       enum: ["Library", "Memories", "Places", "People","Favourites"],
       required: true,
     },
-    description: String,
+    title: {
+      type: String,
+      required: true
+    },
   },
   { timestamps: true }
 );

@@ -4,15 +4,19 @@ import gsap from 'gsap';
 import { Draggable } from 'gsap/Draggable';
 import React, { useLayoutEffect, useRef } from 'react'
 
+// windows in this list won't be draggable at all
+const NON_DRAGGABLE_WINDOWS = ['admin', 'adminLogin'];
+
 const WindowWrapper = (Component, windowKey) => {
     const Wrapped = (props) => {
         const { focusWindow, windows} = useWindowStore();
         const { isOpen,isMinimized, zIndex} = windows[windowKey];
         const ref = useRef(null);
+        const isDraggable = !NON_DRAGGABLE_WINDOWS.includes(windowKey);
 
         useGSAP(() => {
             const element = ref.current;    
-            if(!element) return;
+            if(!element || !isDraggable) return;
 
             const [instance] = Draggable.create(element,{
                 onPress: () => focusWindow(windowKey),//only draggable the winow which is pressed
@@ -51,6 +55,7 @@ const WindowWrapper = (Component, windowKey) => {
                     zIndex,
                     width: windowKey === 'adminLogin' ? '380px' : undefined,
                 }}
+                onMouseDown={() => focusWindow(windowKey)}
             >
                 <Component {...props}/>
             </section>

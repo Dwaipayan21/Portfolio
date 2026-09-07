@@ -20,5 +20,13 @@ export default defineConfig({
       '#hoc': resolve(rootDir, 'src/hoc'),
       '#windows': resolve(rootDir, 'src/windows'),
     }
-  }
+  },
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:5000', 
+        changeOrigin: true,
+      },
+    },
+  },
 })

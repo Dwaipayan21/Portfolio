@@ -11,7 +11,7 @@ const Gallery = () => {
     const {openWindow} = useWindowStore();
     const gallery = useContentStore((state) => state.gallery);
 
-    console.log(`gallery form zustand : ${gallery}`);
+    console.log('gallery: ', gallery);
 
   return (
     <>
@@ -43,23 +43,28 @@ const Gallery = () => {
 
             <div className='gallery'>
                 <ul>
-                    {gallery.map(({ id, img }) => (
-                    <li 
-                        key={id}
-                        onClick={() => 
-                            openWindow('imgfile', {
-                                id, 
-                                name: "Gallery image",
-                                icon: "/images/image.png",
-                                kind: "file",
-                                fileType: "img",
-                                imageUrl: img,
-                            })
-                        }    
-                    >
-                        <img src={img} alt={`Gallery image ${id}`} />
-                    </li>
-                    ))}
+                    {gallery.map((item) => {
+                        const id = item._id;
+                        const img = item.image?.url;
+
+                        return (
+                            <li 
+                                key={id}
+                                onClick={() => 
+                                    openWindow('imgfile', {
+                                        id, 
+                                        name: item.title ?? "Gallery image",
+                                        icon: "/images/image.png",
+                                        kind: "file",
+                                        fileType: "img",
+                                        imageUrl: img,
+                                    })
+                                }    
+                            >
+                                <img src={img} alt={item.title ?? `Gallery image ${id}`} />
+                            </li>
+                        );
+                    })}
                 </ul>
             </div>
         </div>

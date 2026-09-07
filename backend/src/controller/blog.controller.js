@@ -6,13 +6,38 @@ export const getBlogs = async (req, res) => {
 };
 
 export const createBlog = async (req, res) => {
-  const blog = await Blog.create(req.body);
-  res.status(201).json(blog);
+  try {
+    const { title, url, description } = req.body;
+    const blogData = { title, url, description };
+
+    if (req.file) {
+      blogData.coverImage = {
+        url: req.file.path,
+        publicId: req.file.filename,
+      };
+    }
+
+    const blog = await Blog.create(blogData);
+    res.status(201).json(blog);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 };
 
 export const updateBlog = async (req, res) => {
-  const blog = await Blog.findByIdAndUpdate(req.params.id, req.body, { new: true });
-  res.json(blog);
+  try {
+    const updateData = { ...req.body };
+    if (req.file) {
+      updateData.coverImage = {
+        url: req.file.path,
+        publicId: req.file.filename,
+      };
+    }
+    const blog = await Blog.findByIdAndUpdate(req.params.id, updateData, { new: true });
+    res.json(blog);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 };
 
 export const deleteBlog = async (req, res) => {

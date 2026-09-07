@@ -8,15 +8,40 @@ export const getImages = async(req,res) => {
     res.json(images);
 };
 
-export const createImage = async(req, res) => {
-    const image = await Image.create(req.body);
-    res.status(201).json(image);
-}
+export const createImage = async (req, res) => {
+  try {
+    const { title, category } = req.body;
+    const imageData = { title, category };
 
-export const updateImage = async(req, res) => {
-    const image = await Image.findByIdAndUpdate(req.params.id, req.body, {new: true});
+    if (req.file) {
+      imageData.image = {
+        url: req.file.path,       // ← the actual image URL, from Multer/Cloudinary
+        publicId: req.file.filename,
+      };
+    }
+
+    const image = await Image.create(imageData);
     res.status(201).json(image);
-}
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+export const updateImage = async (req, res) => {
+  try {
+    const updateData = { ...req.body };
+    if (req.file) {
+      updateData.image = {
+        url: req.file.path,
+        publicId: req.file.filename,
+      };
+    }
+    const image = await Image.findByIdAndUpdate(req.params.id, updateData, { new: true });
+    res.json(image);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
 
 export const deleteImage = async (req, res) => {
     await Image.findByIdAndDelete(req.params.id);

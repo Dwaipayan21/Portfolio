@@ -516,6 +516,7 @@ const WINDOW_CONFIG = {
   txtfile: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
   imgfile: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
   adminLogin: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null},
+  admin: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null},
 };
 
 export { INITIAL_Z_INDEX, WINDOW_CONFIG };

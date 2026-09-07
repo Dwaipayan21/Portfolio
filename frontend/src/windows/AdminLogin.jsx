@@ -45,7 +45,7 @@ const AdminLogin = () => {
 
       await checkAuth();
 
-      alert('Login successful!');//success popup
+      alert('Login successful!'); // success popup
 
       closeWindow('adminLogin');
 
@@ -59,70 +59,53 @@ const AdminLogin = () => {
   };
 
   return (
-    <>
+    <div className="login-card">
       {/* Header */}
-        <div id="window-header">
-          <WindowControl target="adminLogin" />
-          <h2>Admin Login</h2>
-        </div>
+      <div id="window-header">
+        <WindowControl target="adminLogin" />
+        <h2>Admin Login</h2>
+      </div>
 
-        {/* Content */}
-        <div className='bg-white rounded-b-xl'>
-          <form
-            onSubmit={handleLogin}
-            className="p-6 flex flex-col gap-4 "
-          >
+      {/* Content */}
+      <div className="login-body">
+        <form onSubmit={handleLogin}>
 
-            <div>
-              <label className="text-sm">
-                Email
-              </label>
+          <div className="field">
+            <label>Email</label>
 
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your email"
-                required
-                className="w-full mt-2 px-3 py-2 rounded-md border border-gray-300 outline-none"
-              />
-            </div>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter your email"
+              required
+            />
+          </div>
 
-            <div>
-              <label className="text-sm">
-                Password
-              </label>
+          <div className="field">
+            <label>Password</label>
 
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter your password"
-                required
-                className="w-full mt-2 px-3 py-2 rounded-md border border-gray-300 outline-none"
-              />
-            </div>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter your password"
+              required
+            />
+          </div>
 
-            {error && (
-              <p className="text-sm text-red-500">
-                {error}
-              </p>
-            )}
+          {error && <p className="error">{error}</p>}
 
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-black text-white py-2 rounded-md hover:opacity-80 transition"
-            >
-              {loading ? 'Logging in...' : 'Login'}
-            </button>
+          <button type="submit" disabled={loading}>
+            {loading ? 'Logging in...' : 'Login'}
+          </button>
 
-          </form>
-        </div>
-    </>
+        </form>
+      </div>
+    </div>
   );
 };
 
-const AdminLoginWindow = WindowWrapper( AdminLogin,'adminLogin');
+const AdminLoginWindow = WindowWrapper(AdminLogin, 'adminLogin');
 
 export default AdminLoginWindow;
