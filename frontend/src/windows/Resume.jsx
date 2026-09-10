@@ -5,6 +5,7 @@ import React from 'react'
 import { Document, Page, pdfjs } from 'react-pdf';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
+import { useResume } from '@/hooks/useResume';
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   'pdfjs-dist/build/pdf.worker.min.mjs',
@@ -12,29 +13,38 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 ).toString();
 
 const Resume = () => {
+  const resume = useResume();
+  const downloadUrl = resume?.fileUrl?.replace('/upload/', '/upload/fl_attachment/');
+
   return (
     <>
         <div id='window-header'>
             <WindowControl target='resume'/>
             <h2>Resume.pdf</h2>
 
-            <a 
-             href="files/resume.pdf"
-             download = {true}
-             className='cursor-pointer'
-             title='Download Resume'
-            >
-                <Download className='icon' />
-            </a>
+            {resume && (
+              <a 
+               href={downloadUrl}
+               download={true}
+               className='cursor-pointer'
+               title='Download Resume'
+              >
+                  <Download className='icon' />
+              </a>
+            )}
         </div>
 
-        <Document file="files/resume.pdf">
-            <Page
-                pageNumber={1}
-                renderAnnotationLayer
-                renderTextLayer
-            />
-        </Document>
+        {resume ? (
+          <Document file={resume.fileUrl}>
+              <Page
+                  pageNumber={1}
+                  renderAnnotationLayer
+                  renderTextLayer
+              />
+          </Document>
+        ) : (
+          <p className="p-4 text-sm text-gray-400">No resume uploaded yet.</p>
+        )}
     </>
   )
 }

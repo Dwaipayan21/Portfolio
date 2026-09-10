@@ -9,7 +9,7 @@ import { useState } from 'react';
 const Gallery = () => {
     const { openWindow } = useWindowStore();
     const gallery = useContentStore((state) => state.gallery);
-    const [selectedCategory, setSelectedCategory] = useState('library');
+    const [selectedCategory, setSelectedCategory] = useState('Library');
 
     const filteredGallery = gallery.filter((item) => {
     if (selectedCategory === 'Library') {
