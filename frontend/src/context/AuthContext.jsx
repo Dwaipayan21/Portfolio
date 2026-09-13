@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import api from "../lib/api";
 
 const AuthContext = createContext();
 
@@ -8,15 +9,9 @@ export const AuthProvider = ({ children }) => {
 
   const checkAuth = async () => {
     try {
-      const response = await fetch(
-        "http://localhost:5000/api/auth/check",
-        {
-          method: "GET",
-          credentials: "include",
-        }
-      );
+      const response = await api.get("/auth/check");
 
-      if (response.ok) {
+      if (response.status === 200) {
         setIsAdmin(true);
       } else {
         setIsAdmin(false);

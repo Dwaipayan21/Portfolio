@@ -1,10 +1,24 @@
 import { useEffect, useState } from 'react'
-import axios from 'axios'
+import axios from '@/lib/api'
 import WindowControl from '@/components/WindowControl'
 import WindowWrapper from '@/hoc/WindowWrapper';
 import { ChevronLeft, ChevronRight, Copy, MoveRight, PanelLeft, Plus, Search, Share, ShieldHalf } from 'lucide-react';
 
-const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
+useEffect(() => {
+  const fetchBlogs = async () => {
+    try {
+      const { data } = await api.get("/blogs");
+      setBlogs(data);
+    } catch (err) {
+      console.error("Failed to fetch blogs:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchBlogs();
+}, []);
 
 const Safari = () => {
   const [blogs, setBlogs] = useState([]);

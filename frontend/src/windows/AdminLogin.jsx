@@ -1,8 +1,10 @@
+
 import WindowControl from '@/components/WindowControl';
 import WindowWrapper from '@/hoc/WindowWrapper';
 import { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import useWindowStore from '@/store/window';
+import api from '@/lib/api';
 
 const AdminLogin = () => {
   const { checkAuth } = useAuth();
@@ -20,39 +22,29 @@ const AdminLogin = () => {
     setError('');
 
     try {
-      const response = await fetch(
-        'http://localhost:5000/api/auth/login',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          credentials: 'include',
-          body: JSON.stringify({
-            email,
-            password,
-          }),
-        }
-      );
+      // Uses localhost in development and Render in production
+      const response = await api.post('/auth/login', {
+        email,
+        password,
+      });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(
-            data.message || 'Invalid credentials'
-        );
-      }
-
+      // Refresh authentication state after successful login
       await checkAuth();
 
-      alert('Login successful!'); // success popup
+      alert('Login successful!');
 
       closeWindow('adminLogin');
 
     } catch (error) {
-      setError(error.message);
+      const message =
+        error.response?.data?.message ||
+        error.message ||
+        'Invalid credentials';
 
-      alert(error.message); // error popup
+      setError(message);
+
+      alert(message);
+
     } finally {
       setLoading(false);
     }
