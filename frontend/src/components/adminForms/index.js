@@ -1,7 +1,7 @@
-import ProjectForm, { projectInitialState, projectPanelCopy } from './ProjectForm';
-import ImageForm, { imageInitialState, imagePanelCopy } from './ImageForm';
-import BlogForm, { blogInitialState, blogPanelCopy } from './BlogForm';
-import ResumeForm, { resumeInitialState, resumePanelCopy } from './ResumeForm';
+import ProjectForm, { projectInitialState, projectPanelCopy } from './Projectform';
+import ImageForm, { imageInitialState, imagePanelCopy } from './Imageform';
+import BlogForm, { blogInitialState, blogPanelCopy } from './Blogform';
+import ResumeForm, { resumeInitialState, resumePanelCopy } from './Resumeform';
 
 export const TABS = ['Project', 'Image', 'Blog', 'Resume'];
 
