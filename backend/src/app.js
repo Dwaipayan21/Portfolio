@@ -1,6 +1,8 @@
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import path from "path";
+import { fileURLToPath } from "url";
 
 import authRoutes from "./routes/auth.route.js";
 import projectRoutes from "./routes/project.route.js";
@@ -8,20 +10,34 @@ import imageRoutes from "./routes/image.route.js";
 import blogRoutes from "./routes/blog.route.js";
 import resumeRoutes from "./routes/resume.route.js";
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const app = express();
 
 app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
 
-// app.get("/api/projects", (req, res) => {
-//   res.send("Projects route working");
-// });
-
 app.use("/api/auth", authRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/images", imageRoutes);
 app.use("/api/blogs", blogRoutes);
 app.use("/api/resume", resumeRoutes);
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "../frontend/dist")));
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "../frontend/dist/index.html"));
+  });
+}
+
+// error handler — must be last
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(err.status || 500).json({
+    message: err.message || "Internal Server Error",
+  });
+});
 
 export default app;
