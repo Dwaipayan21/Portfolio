@@ -1,4 +1,4 @@
-import { FieldLabel, Dropzone } from './shared';
+import { FieldLabel, Dropzone } from './Shared';
 
 export const projectInitialState = { title: '', liveLink: '', githubLink: '', description: '', coverImage: null };
 

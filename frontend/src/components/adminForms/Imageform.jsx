@@ -1,4 +1,4 @@
-import { FieldLabel, Dropzone } from './shared';
+import { FieldLabel, Dropzone } from './Shared';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 export const IMAGE_CATEGORIES = ['Library', 'Memories', 'Places', 'People', 'Favorites'];
