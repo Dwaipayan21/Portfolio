@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-
-const API_URL = import.meta.env.VITE_API_URL; // adjust to your actual env var name
+import { fetchResume as apiFetchResume } from '@/lib/portfolioApi';
 
 let cache = null;
 let listeners = [];
@@ -8,11 +7,15 @@ let listeners = [];
 const notify = () => listeners.forEach((l) => l(cache));
 
 export const fetchResume = async () => {
-  const res = await fetch(`${API_URL}/resume`);
-  const data = await res.json();
-  cache = data; // { fileUrl, publicId, createdAt, updatedAt, _id } or null
-  notify();
-  return data;
+  try {
+    const data = await apiFetchResume();
+    cache = data; // { fileUrl, publicId, createdAt, updatedAt, _id } or null
+    notify();
+    return data;
+  } catch (err) {
+    console.error("Failed to fetch resume:", err);
+    return null;
+  }
 };
 
 export const useResume = () => {

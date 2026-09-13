@@ -5,13 +5,14 @@ import { Folder, Image as ImageIcon, FileText, ChevronDown, Plus, User } from 'l
 import { useEffect, useState } from 'react';
 import { TABS, TAB_FORMS, INITIAL_FORMS, PANEL_COPY, TAB_FIELDS, LIST_COPY } from '@/components/adminForms';
 import AssetList from '@/components/adminList/AssertList';
+import api from '@/lib/api';
 
 // Maps each tab to its backend endpoint
 const TAB_ENDPOINTS = {
-  Project: '/api/projects',
-  Image: '/api/images',
-  Blog: '/api/blogs',
-  Resume: '/api/resume',
+  Project: '/projects',
+  Image: '/images',
+  Blog: '/blogs',
+  Resume: '/resume',
 };
 
 // Converts a plain form object into FormData — works whether or not a file field is present
@@ -37,18 +38,15 @@ const AdminDashboard = () => {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const headers = { Authorization: `Bearer ${localStorage.getItem('token')}` };
         const [projectsRes, imagesRes, blogsRes] = await Promise.all([
-          fetch(TAB_ENDPOINTS.Project, { headers }),
-          fetch(TAB_ENDPOINTS.Image, { headers }),
-          fetch(TAB_ENDPOINTS.Blog, { headers }),
+          api.get(TAB_ENDPOINTS.Project),
+          api.get(TAB_ENDPOINTS.Image),
+          api.get(TAB_ENDPOINTS.Blog),
         ]);
 
-        const [projectsData, imagesData, blogsData] = await Promise.all([
-          projectsRes.json(),
-          imagesRes.json(),
-          blogsRes.json(),
-        ]);
+        const projectsData = projectsRes.data;
+        const imagesData = imagesRes.data;
+        const blogsData = blogsRes.data;
 
         // handles either a raw array response or { data: [...] } / { count: n }
         const countOf = (d) =>
@@ -89,23 +87,10 @@ const AdminDashboard = () => {
     setError(null);
 
     try {
-      const res = await fetch(TAB_ENDPOINTS[activeTab], {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-        body: buildFormData(form), // always FormData — never set Content-Type manually
-      });
-
-      if (!res.ok) {
-        const err = await res.json().catch(() => ({}));
-        throw new Error(err.message || `Save failed (${res.status})`);
-      }
-
+      await api.post(TAB_ENDPOINTS[activeTab], buildFormData(form));
       handleClear(); // reset this tab's form on success
-      // TODO: refresh stat cards / show a success toast here
     } catch (err) {
-      setError(err.message);
+      setError(err.response?.data?.message || err.message || 'Save failed');
     } finally {
       setIsSubmitting(false);
     }
@@ -113,17 +98,13 @@ const AdminDashboard = () => {
 
   const handleDelete = async (id) => {
     try {
-      const res = await fetch(`${TAB_ENDPOINTS[activeTab]}/${id}`, {
-        method: 'DELETE',
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-      });
-      if (!res.ok) throw new Error('Delete failed');
+      await api.delete(`${TAB_ENDPOINTS[activeTab]}/${id}`);
       setListData((prev) => ({
         ...prev,
         [activeTab]: prev[activeTab].filter((item) => item._id !== id),
       }));
     } catch (err) {
-      setError(err.message);
+      setError(err.response?.data?.message || err.message || 'Delete failed');
     }
   };
 

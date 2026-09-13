@@ -1,24 +1,8 @@
 import { useEffect, useState } from 'react'
-import axios from '@/lib/api'
+import api from '@/lib/api'
 import WindowControl from '@/components/WindowControl'
 import WindowWrapper from '@/hoc/WindowWrapper';
 import { ChevronLeft, ChevronRight, Copy, MoveRight, PanelLeft, Plus, Search, Share, ShieldHalf } from 'lucide-react';
-
-
-useEffect(() => {
-  const fetchBlogs = async () => {
-    try {
-      const { data } = await api.get("/blogs");
-      setBlogs(data);
-    } catch (err) {
-      console.error("Failed to fetch blogs:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  fetchBlogs();
-}, []);
 
 const Safari = () => {
   const [blogs, setBlogs] = useState([]);
@@ -27,7 +11,7 @@ const Safari = () => {
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const res = await axios.get(`${BASE_URL}/blogs`);
+        const res = await api.get("/blogs");
         setBlogs(res.data);
       } catch (err) {
         console.error("Failed to fetch blogs:", err);

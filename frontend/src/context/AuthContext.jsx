@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import api from "../lib/api";
+import api from "@/lib/api";
 
 const AuthContext = createContext();
 
@@ -11,13 +11,13 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await api.get("/auth/check");
 
-      if (response.status === 200) {
+      if (response.status === 200 && response.data?.authenticated) {
         setIsAdmin(true);
       } else {
         setIsAdmin(false);
       }
     } catch (error) {
-      console.error("Authentication check failed:", error);
+      // 401 or network error indicates user is not logged in as admin
       setIsAdmin(false);
     } finally {
       setAuthLoading(false);
