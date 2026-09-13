@@ -10,5 +10,5 @@ export const WALLPAPERS = [
   "/wallpapers/wallpaper9.jpg",
 ];
 
-export const MIN_INTERVAL = 10* 1000; // 1 hour
-export const MAX_INTERVAL = 20 * 1000; // 2 hours
+export const MIN_INTERVAL = 60* 60* 1000; // 1 hour
+export const MAX_INTERVAL = 2 * 60* 60* 1000; // 2 hours
