@@ -14,10 +14,7 @@ body {
   width: 100dvw;
   overflow: hidden;
   height: 100dvh;
-  background-image: url("/images/wallpaper.png");
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
+  background-color: #000;
 }
 
 @theme {
@@ -82,9 +79,26 @@ body {
     @apply p-1 hover:bg-gray-200 rounded hover:cursor-default;
   }
 
+  #wallpaper-root {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .wallpaper-layer {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0;
+    transition: opacity 2s ease-in-out;
+  }
+
   #welcome {
     @apply text-gray-200 flex flex-col justify-center items-center absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 select-none max-sm:h-screen max-sm:w-full max-sm:px-10;
-
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
     .small-screen {
       @apply sm:hidden m-7 bg-red-300/20 backdrop-blur-lg p-3 rounded-md absolute top-10;
 
@@ -155,9 +169,11 @@ body {
     }
   }
 }
-  #admin {
-    @apply w-[1100px] max-h-[85dvh] absolute top-10 left-1/2 -translate-x-1/2 bg-gray-50 shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden flex flex-col;
-  }
+
+#admin {
+  @apply w-[1100px] absolute top-10 left-1/2 -translate-x-1/2 bg-gray-50 text-gray-900 shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden flex flex-col;
+} 
+
 
   #window-controls {
     @apply flex gap-2;
@@ -372,6 +388,7 @@ body {
       }
     }
   }
+
   #resume {
     @apply w-fit h-fit absolute top-16 left-7/12 bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
 
@@ -431,6 +448,98 @@ body {
         p {
           @apply text-sm text-center font-medium w-40 text-gray-700;
         }
+      }
+    }
+  }
+
+  #notes {
+    @apply w-3xl absolute top-20 left-1/4 bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden flex flex-col;
+    height: 460px;
+
+    #window-header {
+      @apply bg-[#fdf6b2] border-b border-yellow-200/60;
+
+      h2 {
+        @apply font-semibold text-sm text-yellow-900/70;
+      }
+    }
+
+    .body {
+      @apply flex flex-1 min-h-0 overflow-hidden;
+    }
+
+    .sidebar {
+      @apply w-2/12 flex-none bg-gray-50 border-r border-gray-200 flex flex-col p-4 space-y-2;
+
+      h3 {
+        @apply text-xs font-medium text-gray-400 mb-1;
+      }
+
+      li {
+        @apply flex items-center gap-2 px-2 py-1.5 rounded-md cursor-pointer text-sm text-gray-700 transition-colors;
+
+        &:hover {
+          @apply bg-yellow-100/70;
+        }
+      }
+
+      .active {
+        @apply bg-yellow-200/70 text-yellow-900 font-medium;
+      }
+    }
+
+    .note-list {
+       @apply w-3/12 flex-none bg-gray-50/60 border-r border-gray-200 overflow-y-auto;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+
+        &::-webkit-scrollbar {
+          display: none;
+        }
+
+      li {
+        @apply px-4 py-3 border-b border-gray-100 cursor-pointer transition-colors;
+
+        &:hover {
+          @apply bg-yellow-50;
+        }
+
+        h4 {
+          @apply text-sm font-semibold text-gray-800 truncate;
+        }
+
+        p {
+          @apply text-xs text-gray-500 truncate mt-0.5;
+        }
+
+        span {
+          @apply text-[10px] text-gray-400;
+        }
+      }
+
+      .active {
+        @apply bg-yellow-100;
+      }
+    }
+
+    .editor {
+      @apply flex-1 min-w-0 p-8 overflow-y-auto;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+      h2 {
+        @apply text-xl font-semibold text-gray-800 mb-1;
+      }
+
+      time {
+        @apply text-xs text-gray-400 block mb-4;
+      }
+
+      p {
+        @apply text-sm text-gray-700 leading-relaxed;
       }
     }
   }
@@ -601,4 +710,8 @@ body {
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+}
+#admin {
+  height: 85dvh;
+  max-height: 85dvh;
 }

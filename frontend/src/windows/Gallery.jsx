@@ -49,7 +49,7 @@ const Gallery = () => {
                             <li 
                                 key={id}
                                 onClick={() => setSelectedCategory(id)}
-                                className={selectedCategory === id ? 'active' : ''}
+                                className={selectedCategory === id ? 'active' : 'not-active'}
                             >
                                 <img
                                     src={icon}

@@ -1,10 +1,29 @@
+import { useEffect, useState } from 'react'
+import axios from 'axios'
 import WindowControl from '@/components/WindowControl'
-import { blogPosts } from '@/constants';
 import WindowWrapper from '@/hoc/WindowWrapper';
 import { ChevronLeft, ChevronRight, Copy, MoveRight, PanelLeft, Plus, Search, Share, ShieldHalf } from 'lucide-react';
-import React from 'react'
+
+const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 const Safari = () => {
+  const [blogs, setBlogs] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        const res = await axios.get(`${BASE_URL}/blogs`);
+        setBlogs(res.data);
+      } catch (err) {
+        console.error("Failed to fetch blogs:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchBlogs();
+  }, []);
+
   return (
     <>
         {/* search bar */}
@@ -42,17 +61,28 @@ const Safari = () => {
         <div className='blog'>
             <h2>My Developer Blog</h2>
 
+            {loading && <p className='text-gray-400'>Loading posts...</p>}
+            {!loading && blogs.length === 0 && (
+                <p className='text-gray-400'>No blog posts yet.</p>
+            )}
+
             <div className='space-y-8'>
-                {blogPosts.map(({ id, image, title, date, link }) => (
-                    <div key={id} className='blog-post'>
+                {blogs.map(({ _id, coverImage, title, createdAt, url }) => (
+                    <div key={_id} className='blog-post'>
                         <div className='col-span-2'>
-                            <img src={image} alt={title} />
+                            <img src={coverImage?.url} alt={title} />
                         </div>
 
                         <div className='content'>
-                            <p>{date}</p>
+                            <p>
+                                {new Date(createdAt).toLocaleDateString("en-US", {
+                                    year: "numeric",
+                                    month: "short",
+                                    day: "numeric",
+                                })}
+                            </p>
                             <h3>{title}</h3>
-                            <a href={link} target='_blank' rel='noopener noreferrer'>
+                            <a href={url} target='_blank' rel='noopener noreferrer'>
                                 Check out the full post 
                                 <MoveRight className='icon-hover'/>
                             </a>

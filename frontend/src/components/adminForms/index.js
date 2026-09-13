@@ -25,3 +25,15 @@ export const PANEL_COPY = {
   Blog: blogPanelCopy,
   Resume: resumePanelCopy,
 };
+
+export const TAB_FIELDS = {
+  Project: { cover: 'screenshot' },
+  Image:   { cover: 'image' },
+  Blog:    { cover: 'coverImage' },
+};
+
+export const LIST_COPY = {
+  Project: { heading: 'Your Projects', subtext: 'Manage your projects' },
+  Image:   { heading: 'Your Images',   subtext: 'Manage your images' },
+  Blog:    { heading: 'Your Blogs',    subtext: 'Manage your blogs' },
+};

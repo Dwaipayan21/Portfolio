@@ -55,6 +55,12 @@ const dockApps = [
     canOpen: true,
   },
   {
+    id: "notes",
+    name: "About Me", // was "Note"
+    icon: "notes.png",
+    canOpen: true,
+  },
+  {
     id: "contact",
     name: "Contact", // or "Get in touch"
     icon: "contact.png",
@@ -517,6 +523,7 @@ const WINDOW_CONFIG = {
   imgfile: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
   adminLogin: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null},
   admin: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null},
+  notes: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null},
 };
 
 export { INITIAL_Z_INDEX, WINDOW_CONFIG };

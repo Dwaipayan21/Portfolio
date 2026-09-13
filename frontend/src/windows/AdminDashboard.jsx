@@ -3,7 +3,8 @@ import WindowWrapper from '@/hoc/WindowWrapper';
 import { useAuth } from '@/context/AuthContext';
 import { Folder, Image as ImageIcon, FileText, ChevronDown, Plus, User } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { TABS, TAB_FORMS, INITIAL_FORMS, PANEL_COPY } from '@/components/adminForms';
+import { TABS, TAB_FORMS, INITIAL_FORMS, PANEL_COPY, TAB_FIELDS, LIST_COPY } from '@/components/adminForms';
+import AssetList from '@/components/adminList/AssertList';
 
 // Maps each tab to its backend endpoint
 const TAB_ENDPOINTS = {
@@ -29,6 +30,9 @@ const AdminDashboard = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
   const [stats, setStats] = useState({ projects: 0, images: 0, blogs: 0});
+  const [ viewMode, setViewMode] = useState('form');
+  const [listData, setListData] = useState({ Project: [], Image: [], Blog: []});
+  const [isListLoading, setIsListLoading] = useState(false);
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -49,12 +53,20 @@ const AdminDashboard = () => {
         // handles either a raw array response or { data: [...] } / { count: n }
         const countOf = (d) =>
           Array.isArray(d) ? d.length : Array.isArray(d?.data) ? d.data.length : d?.count ?? 0;
-
+        
         setStats({
           projects: countOf(projectsData),
           images: countOf(imagesData),
           blogs: countOf(blogsData),
         });
+
+        const arrOf = (d) => (Array.isArray(d) ? d : Array.isArray(d?.data) ? d.data : []);
+        setListData({
+          Project: arrOf(projectsData),
+          Image : arrOf(imagesData),
+          Blog: arrOf(blogsData),
+        });
+
       } catch (err) {
         console.error('Failed to fetch stats:', err);
       }
@@ -99,9 +111,24 @@ const AdminDashboard = () => {
     }
   };
 
-  const ActiveForm = TAB_FORMS[activeTab];
-  const copy = PANEL_COPY[activeTab];
+  const handleDelete = async (id) => {
+    try {
+      const res = await fetch(`${TAB_ENDPOINTS[activeTab]}/${id}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+      });
+      if (!res.ok) throw new Error('Delete failed');
+      setListData((prev) => ({
+        ...prev,
+        [activeTab]: prev[activeTab].filter((item) => item._id !== id),
+      }));
+    } catch (err) {
+      setError(err.message);
+    }
+  };
 
+  const ActiveForm = TAB_FORMS[activeTab];
+  const copy = viewMode === 'list' ? LIST_COPY[activeTab] : PANEL_COPY[activeTab];
   return (
     <>
       <div id='window-header' className='flex-none'>
@@ -114,7 +141,7 @@ const AdminDashboard = () => {
         </div>
       </div>
 
-      <div className='flex-1 min-h-0 overflow-y-auto p-6 space-y-6'>
+      <div className='flex-1 min-h-0 overflow-y-auto p-6 space-y-6 bg-gray-50 scrollbar-hide'>
         <div className='flex items-start justify-between'>
           <div>
             <h1 className='text-2xl font-bold'>Admin Dashboard</h1>
@@ -129,37 +156,49 @@ const AdminDashboard = () => {
         </div>
 
         <div className='grid grid-cols-3 gap-4'>
-          <div className='rounded-xl border p-4 bg-gradient-to-br from-blue-50 to-white'>
+          {/* project list */}
+          <button
+            onClick={() => { setActiveTab('Project'); setViewMode('list'); }}
+            className='rounded-xl border p-4 bg-gradient-to-br from-blue-50 to-white text-left'
+          >
             <div className='mb-3 flex size-9 items-center justify-center rounded-lg bg-white shadow-sm'>
               <Folder size={18} className='text-blue-600' />
             </div>
-            <p className='text-2xl font-bold'>{stats.projects}</p>
+            <p className='text-2xl font-bold text-gray-900'>{stats.projects}</p>
             <p className='text-xs uppercase text-gray-500'>Projects</p>
-          </div>
-
-          <div className='rounded-xl border p-4 bg-gradient-to-br from-green-50 to-white'>
+          </button>
+          {/* image list */}
+          <button
+            onClick={() => { setActiveTab('Image'); setViewMode('list'); }}
+            className='rounded-xl border p-4 bg-gradient-to-br from-green-50 to-white text-left'
+          >
             <div className='mb-3 flex size-9 items-center justify-center rounded-lg bg-white shadow-sm'>
               <ImageIcon size={18} className='text-green-600' />
             </div>
-            <p className='text-2xl font-bold'>{[stats.images]}</p>
+            <p className='text-2xl font-bold text-gray-900'>{stats.images}</p>
             <p className='text-xs uppercase text-gray-500'>Images</p>
-          </div>
-
-          <div className='rounded-xl border p-4 bg-gradient-to-br from-orange-50 to-white'>
+          </button>
+          {/* blog list */}
+          <button
+            onClick={() => { setActiveTab('Blog'); setViewMode('list'); }}
+            className='rounded-xl border p-4 bg-gradient-to-br from-orange-50 to-white text-left'
+          >
             <div className='mb-3 flex size-9 items-center justify-center rounded-lg bg-white shadow-sm'>
               <FileText size={18} className='text-orange-600' />
             </div>
-            <p className='text-2xl font-bold'>{stats.blogs}</p>
+            <p className='text-2xl font-bold text-gray-900'>{stats.blogs}</p>
             <p className='text-xs uppercase text-gray-500'>Blogs</p>
-          </div>
+          </button>
         </div>
 
         <div className='rounded-xl border p-6 space-y-5'>
           <div className='flex items-center justify-between'>
             <div className='flex items-center gap-3'>
-              <div className='flex size-9 items-center justify-center rounded-lg bg-gray-100'>
-                <Plus size={18} />
-              </div>
+              {viewMode === 'form' && (
+                <div className='flex size-9 items-center justify-center rounded-lg bg-gray-100 text-gray-600'>
+                  <Plus size={18} />
+                </div>
+              )}
               <div>
                 <h3 className='font-semibold'>{copy.heading}</h3>
                 <p className='text-sm text-gray-500'>{copy.subtext}</p>
@@ -170,10 +209,10 @@ const AdminDashboard = () => {
               {TABS.map((tab) => (
                 <button
                   key={tab}
-                  onClick={() => setActiveTab(tab)}
+                  onClick={() => { setActiveTab(tab); setViewMode('form'); }}
                   className={
                     tab === activeTab
-                      ? 'rounded-md bg-white px-3 py-1 text-sm font-medium shadow-sm'
+                      ? 'rounded-md bg-white px-3 py-1 text-sm font-medium shadow-sm text-blue-500'
                       : 'rounded-md px-3 py-1 text-sm text-gray-500'
                   }
                 >
@@ -183,26 +222,37 @@ const AdminDashboard = () => {
             </div>
           </div>
 
-          <ActiveForm form={form} setField={setField} />
+          {viewMode === 'list' ? (
+            <AssetList 
+              items={listData[activeTab]}
+              isLoading={isListLoading}
+              coverField={TAB_FIELDS[activeTab]?.cover}
+              onDelete={handleDelete}
+            />
+          ) : (
+            <ActiveForm form={form} setField={setField} />
+          )}
 
           {error && <p className='text-sm text-red-500'>{error}</p>}
 
-          <div className='flex justify-end gap-3'>
-            <button
-              onClick={handleClear}
-              className='px-4 py-2 text-sm text-gray-700 cursor-pointer'
-              disabled={isSubmitting}
-            >
-              Clear
-            </button>
-            <button
-              onClick={handleSubmit}
-              disabled={isSubmitting}
-              className='rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white disabled:opacity-50 cursor-pointer'
-            >
-              {isSubmitting ? 'Saving...' : copy.submitLabel}
-            </button>
-          </div>
+          {viewMode === 'form' && (
+            <div className='flex justify-end gap-3'>
+              <button
+                onClick={handleClear}
+                className='px-4 py-2 text-sm text-gray-700 cursor-pointer'
+                disabled={isSubmitting}
+              >
+                Clear
+              </button>
+              <button
+                onClick={handleSubmit}
+                disabled={isSubmitting}
+                className='rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white disabled:opacity-50 cursor-pointer'
+              >
+                {isSubmitting ? 'Saving...' : copy.submitLabel}
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </>
