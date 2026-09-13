@@ -1,0 +1,22 @@
+{
+  "name": "mac_portfolio",
+  "version": "1.0.0",
+  "description": "��#\u0000 \u0000P\u0000o\u0000r\u0000t\u0000f\u0000o\u0000l\u0000i\u0000o\u0000\r\u0000 \u0000",
+  "main": "index.js",
+  "scripts": {
+    "build" : "npm install --prefix backend && npm install --prefix frontend && npm run build --prefix frontend",
+    "start": "npm start --prefix backend"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dwaipayan21/Portfolio.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Dwaipayan21/Portfolio/issues"
+  },
+  "homepage": "https://github.com/Dwaipayan21/Portfolio#readme"
+}
