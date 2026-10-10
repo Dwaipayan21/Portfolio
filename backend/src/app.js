@@ -48,6 +48,15 @@ app.use("/api/images", imageRoutes);
 app.use("/api/blogs", blogRoutes);
 app.use("/api/resume", resumeRoutes);
 
+// Health-check endpoint for uptime monitoring
+app.get("/api/health", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "Portfolio backend is running",
+    timestamp: new Date().toISOString(),
+  });
+});
+
 // Handle unmatched API routes with JSON 404
 app.use("/api", (req, res) => {
   res.status(404).json({ message: "API route not found" });
