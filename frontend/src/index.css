@@ -170,6 +170,10 @@ body {
 
 #admin {
   @apply w-[1100px] absolute top-10 left-1/2 -translate-x-1/2 bg-gray-50 text-gray-900 shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden flex flex-col;
+
+  height: 85dvh;
+  max-height: 85dvh;
+  min-height: 85dvh;
 } 
 
 
@@ -190,11 +194,14 @@ body {
   }
 
   #window-header {
-    @apply flex items-center justify-between px-4 py-3 rounded-t-lg bg-gray-50 border-b border-gray-200 select-none text-sm text-gray-400;
-  }
+  @apply flex shrink-0 items-center justify-between px-4 py-3
+  rounded-t-lg bg-gray-50 border-b border-gray-200
+  select-none text-sm text-gray-400;
+}
 
   #safari {
     @apply w-4xl absolute top-40 left-2/12 bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
+    max-height: calc(100dvh - 11rem);
 
     .search {
       @apply flex items-center gap-3 w-2/3 bg-white border border-gray-300 rounded-lg px-3 py-2;
@@ -206,6 +213,7 @@ body {
 
     .blog {
       @apply bg-white p-10 max-w-3xl mx-auto;
+      @apply flex-1 min-h-0 overflow-y-auto;
 
       h2 {
         @apply text-xl font-bold text-pink-600 mb-10;
@@ -239,13 +247,14 @@ body {
 
   #terminal {
     @apply w-xl absolute top-32 left-1/12 bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
+    max-height: calc(100dvh - 9rem);
 
     h2 {
       @apply font-bold text-sm text-center w-full;
     }
 
     .techstack {
-      @apply text-sm font-roboto p-5 text-black;
+      @apply flex-1 min-h-0 overflow-y-auto text-sm font-roboto p-5 text-black;
 
       .label {
         @apply flex items-center ms-10 mt-7;
@@ -285,6 +294,11 @@ body {
 
   #contact {
     @apply max-w-2xl absolute top-60 left-5/12 bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
+    max-height: calc(100dvh - 16rem);
+
+    > #window-header + div {
+      @apply flex-1 min-h-0 overflow-y-auto;
+    }
 
     h2 {
       @apply font-bold text-sm text-center w-full;
@@ -389,6 +403,11 @@ body {
 
   #resume {
     @apply w-fit h-fit absolute top-16 left-7/12 bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
+    max-height: calc(100dvh - 5rem);
+
+    > #window-header ~ * {
+      @apply flex-1 min-h-0 overflow-y-auto;
+    }
 
     #window-header {
       h2 {
@@ -544,6 +563,11 @@ body {
 
   #txtfile {
     @apply w-md absolute top-36 right-32 bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
+    max-height: calc(100dvh - 10rem);
+
+    > #window-header + div {
+      @apply flex-1 min-h-0 overflow-y-auto;
+    }
 
     h2 {
       @apply font-bold text-sm text-center w-full;
@@ -552,6 +576,11 @@ body {
 
   #imgfile {
     @apply w-xl absolute top-40 left-2/12 bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
+    max-height: calc(100dvh - 11rem);
+
+    > #window-header + div {
+      @apply flex-1 min-h-0 overflow-y-auto;
+    }
 
     #window-header {
       p {
@@ -708,8 +737,4 @@ body {
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
-}
-#admin {
-  height: 85dvh;
-  max-height: 85dvh;
 }

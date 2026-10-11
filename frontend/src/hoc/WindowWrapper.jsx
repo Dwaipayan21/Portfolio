@@ -44,13 +44,14 @@ const WindowWrapper = (Component, windowKey) => {
             const element = ref.current;
             if(!element) return;
 
-            element.style.display = (isOpen && !isMinimized) ? 'block' : "none";
+            element.style.display = (isOpen && !isMinimized) ? 'flex' : "none";
         },[isOpen, isMinimized])
 
         return (
             <section 
                 id={windowKey} 
-                ref={ref} 
+                ref={ref}
+                className='flex flex-col overflow-hidden'
                 style={{ 
                     zIndex,
                     width: windowKey === 'adminLogin' ? '380px' : undefined,

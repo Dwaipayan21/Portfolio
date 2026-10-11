@@ -129,11 +129,6 @@ const AdminDashboard = () => {
             <p className='text-sm text-gray-500'>Welcome back. Here is the overview of your system.</p>
           </div>
 
-          <button className='flex items-center gap-1 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white'>
-            <Plus size={16} />
-            Upload New Asset
-            <ChevronDown size={16} />
-          </button>
         </div>
 
         <div className='grid grid-cols-3 gap-4'>
