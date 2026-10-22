@@ -93,36 +93,8 @@ app.use("/api", (req, res) => {
   res.status(404).json({ message: "API route not found" });
 });
 
-// // Serve React frontend in production
-// if (process.env.NODE_ENV === "production") {
-//   const frontendPath = path.resolve(
-//     __dirname,
-//     "../../frontend/dist"
-//   );
-
-//   app.use(express.static(frontendPath));
-
-//   app.get(/^(?!\/api(?:\/|$)).*/, (req, res) => {
-//     res.sendFile(path.join(frontendPath, "index.html"));
-//   });
-// }
-
-// Serve React frontend in production.
-if (process.env.VERCEL) {
-  // Vercel serves public assets directly.
-  // This fallback handles React Router paths.
-  const frontendPath = path.resolve(process.cwd(), "public");
-
-  app.get(/^(?!\/api(?:\/|$)).*/, (req, res, next) => {
-    res.sendFile(
-      path.join(frontendPath, "index.html"),
-      (error) => {
-        if (error) next(error);
-      }
-    );
-  });
-} else if (process.env.NODE_ENV === "production") {
-  // Preserve existing Render behavior.
+// Serve React frontend in production
+if (process.env.NODE_ENV === "production") {
   const frontendPath = path.resolve(
     __dirname,
     "../../frontend/dist"
@@ -134,6 +106,7 @@ if (process.env.VERCEL) {
     res.sendFile(path.join(frontendPath, "index.html"));
   });
 }
+
 
 // Error handler
 app.use((err, req, res, next) => {
