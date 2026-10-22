@@ -4,6 +4,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import path from "path";
 import { fileURLToPath } from "url";
+import connectDB from "./config/db.js";
 
 import authRoutes from "./routes/auth.route.js";
 import projectRoutes from "./routes/project.route.js";
@@ -22,6 +23,9 @@ const allowedOrigins = [
   "http://localhost:5000",
   "https://portfolio-ch7m.onrender.com",
   process.env.FRONTEND_URL?.replace(/\/$/, ""),
+  process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}`
+    : undefined,
 ].filter(Boolean);
 
 app.use(
@@ -41,6 +45,32 @@ app.use(
 
 app.use(express.json());
 app.use(cookieParser());
+
+// Connect to MongoDB on demand in Vercel's serverless runtime.
+let vercelDbPromise;
+
+if (process.env.VERCEL) {
+  app.use(async (req, res, next) => {
+    if (
+      !req.path.startsWith("/api/") ||
+      req.path === "/api/health"
+    ) {
+      return next();
+    }
+
+    try {
+      if (!vercelDbPromise) {
+        vercelDbPromise = connectDB();
+      }
+
+      await vercelDbPromise;
+      next();
+    } catch (error) {
+      vercelDbPromise = undefined;
+      next(error);
+    }
+  });
+}
 
 // API routes
 app.use("/api/auth", authRoutes);
@@ -63,8 +93,36 @@ app.use("/api", (req, res) => {
   res.status(404).json({ message: "API route not found" });
 });
 
-// Serve React frontend in production
-if (process.env.NODE_ENV === "production") {
+// // Serve React frontend in production
+// if (process.env.NODE_ENV === "production") {
+//   const frontendPath = path.resolve(
+//     __dirname,
+//     "../../frontend/dist"
+//   );
+
+//   app.use(express.static(frontendPath));
+
+//   app.get(/^(?!\/api(?:\/|$)).*/, (req, res) => {
+//     res.sendFile(path.join(frontendPath, "index.html"));
+//   });
+// }
+
+// Serve React frontend in production.
+if (process.env.VERCEL) {
+  // Vercel serves public assets directly.
+  // This fallback handles React Router paths.
+  const frontendPath = path.resolve(process.cwd(), "public");
+
+  app.get(/^(?!\/api(?:\/|$)).*/, (req, res, next) => {
+    res.sendFile(
+      path.join(frontendPath, "index.html"),
+      (error) => {
+        if (error) next(error);
+      }
+    );
+  });
+} else if (process.env.NODE_ENV === "production") {
+  // Preserve existing Render behavior.
   const frontendPath = path.resolve(
     __dirname,
     "../../frontend/dist"

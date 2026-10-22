@@ -1,22 +1,22 @@
 {
   "name": "mac_portfolio",
   "version": "1.0.0",
-  "description": "Portfolio",
-  "main": "index.js",
+  "private": true,
+  "type": "module",
   "scripts": {
-    "build" : "npm install --prefix backend && npm install --prefix frontend && npm run build --prefix frontend",
+    "build": "npm install --prefix backend && npm install --prefix frontend && npm run build --prefix frontend && node scripts/prepare-vercel.mjs",
     "start": "npm start --prefix backend"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Dwaipayan21/Portfolio.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
-  "bugs": {
-    "url": "https://github.com/Dwaipayan21/Portfolio/issues"
-  },
-  "homepage": "https://github.com/Dwaipayan21/Portfolio#readme"
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cloudinary": "^1.41.3",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.9.4",
+    "multer": "^2.3.0",
+    "multer-storage-cloudinary": "^4.0.0"
+  }
 }
