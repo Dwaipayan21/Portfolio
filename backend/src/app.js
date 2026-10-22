@@ -20,23 +20,24 @@ const app = express();
 const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:5000",
-  "https://portfolio-7bh6.onrender.com",
-  process.env.FRONTEND_URL,
-  process.env.FRONTEND_URL ? process.env.FRONTEND_URL.replace(/\/$/, "") : null,
+  "https://portfolio-ch7m.onrender.com",
+  process.env.FRONTEND_URL?.replace(/\/$/, ""),
 ].filter(Boolean);
 
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Allow requests with no origin (e.g. mobile apps, curl, same-origin)
-      if (!origin || allowedOrigins.includes(origin) || allowedOrigins.includes(origin.replace(/\/$/, ""))) {
+      if (!origin || allowedOrigins.includes(origin.replace(/\/$/, ""))) {
         return callback(null, true);
       }
+
+      console.error("Blocked CORS origin:", origin);
       return callback(new Error(`CORS error: Origin ${origin} not allowed`));
     },
     credentials: true,
   })
 );
+
 
 app.use(express.json());
 app.use(cookieParser());
