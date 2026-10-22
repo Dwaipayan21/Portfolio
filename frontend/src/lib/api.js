@@ -4,8 +4,8 @@ const api = axios.create({
   baseURL:
     import.meta.env.MODE === "development"
       ? "http://localhost:5000/api"
-      : "/api",
+      : `${import.meta.env.VITE_API_URL}/api`,
   withCredentials: true,
 });
 
-export default api;
+export default api;
