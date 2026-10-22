@@ -2,37 +2,45 @@ import bcrypt from "bcryptjs";
 import Admin from "../models/admin.model.js";
 import generateToken from "../utils/generateToken.js";
 
+const isProduction = process.env.NODE_ENV === "production";
+
+const cookieOptions = {
+  httpOnly: true,
+  secure: isProduction,
+  sameSite: isProduction ? "none" : "lax",
+  path: "/",
+  maxAge: 7 * 24 * 60 * 60 * 1000,
+};
+
 export const login = async (req, res) => {
-  const { email, password } = req.body;
+  try {
+    const { email, password } = req.body;
 
-  const admin = await Admin.findOne({ email });
-  if (!admin) return res.status(401).json({ message: "Invalid credentials" });
+    const admin = await Admin.findOne({ email });
+    if (!admin || !(await bcrypt.compare(password, admin.passwordHash))) {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
 
-  const isMatch = await bcrypt.compare(password, admin.passwordHash);
-  if (!isMatch) return res.status(401).json({ message: "Invalid credentials" });
+    const token = generateToken(admin._id);
 
-  const token = generateToken(admin._id);
-
-  res.cookie("token", token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
-    maxAge: 7 * 24 * 60 * 60 * 1000,
-  });
-
-  res.json({ message: "Logged in" });
+    res.cookie("token", token, cookieOptions);
+    return res.status(200).json({
+      success: true,
+      message: "Logged in",
+    });
+  } catch (error) {
+    console.error("Admin login error:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
 };
 
 export const logout = (req, res) => {
-  res.clearCookie("token", {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
-  });
+  const { maxAge, ...clearOptions } = cookieOptions;
 
-  res.json({ message: "Logged out" });
+  res.clearCookie("token", clearOptions);
+  return res.status(200).json({ message: "Logged out" });
 };
 
 export const checkAuth = (req, res) => {
-  res.json({ authenticated: true });
+  return res.status(200).json({ authenticated: true });
 };
