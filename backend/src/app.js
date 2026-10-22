@@ -22,16 +22,27 @@ const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:5000",
   "https://portfolio-ch7m.onrender.com",
+  "https://portfolio-5na9.vercel.app",
   process.env.FRONTEND_URL?.replace(/\/$/, ""),
-  process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}`
-    : undefined,
 ].filter(Boolean);
 
 app.use(
   cors({
     origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin.replace(/\/$/, ""))) {
+      if (
+        !origin ||
+        allowedOrigins.includes(origin.replace(/\/$/, ""))
+      ) {
+        return callback(null, true);
+      }
+
+      // Allow Vercel preview deployments for this frontend project only.
+      const isPortfolioPreview =
+        /^https:\/\/portfolio-5na9-[a-z0-9-]+-dwaipayan21s-projects\.vercel\.app$/.test(
+          origin
+        );
+
+      if (isPortfolioPreview) {
         return callback(null, true);
       }
 
@@ -41,6 +52,7 @@ app.use(
     credentials: true,
   })
 );
+
 
 
 app.use(express.json());
