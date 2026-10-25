@@ -2,29 +2,26 @@ import { createContext, useContext, useEffect, useState } from "react"
 
 const ThemeProviderContext = createContext()
 
+const getInitialTheme = (storageKey, defaultTheme) => {
+  const stored = localStorage.getItem(storageKey)
+  // ignore stale "system" values from before
+  return stored === "light" || stored === "dark" ? stored : defaultTheme
+}
+
 export function ThemeProvider({ children, defaultTheme = "dark", storageKey = "vite-ui-theme" }) {
-  const [theme, setTheme] = useState(
-    () => localStorage.getItem(storageKey) || defaultTheme
-  )
+  const [theme, setTheme] = useState(() => getInitialTheme(storageKey, defaultTheme))
 
   useEffect(() => {
     const root = window.document.documentElement
     root.classList.remove("light", "dark")
-
-    if (theme === "system") {
-      const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
-        ? "dark" : "light"
-      root.classList.add(systemTheme)
-      return
-    }
     root.classList.add(theme)
   }, [theme])
 
   const value = {
     theme,
-    setTheme: (theme) => {
-      localStorage.setItem(storageKey, theme)
-      setTheme(theme)
+    setTheme: (newTheme) => {
+      localStorage.setItem(storageKey, newTheme)
+      setTheme(newTheme)
     },
   }
 
