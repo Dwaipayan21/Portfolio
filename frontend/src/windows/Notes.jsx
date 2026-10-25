@@ -12,8 +12,9 @@ const notesData = [
     date: 'September 12, 2024 at 4:15 PM',
     heading: '👋 About Me — Dwaipayan',
     body: [
-      `Hello there! I'm a passionate Software Engineer & Creative Developer dedicated to engineering intuitive, high-performance digital experiences. I specialize in crafting fluid user interfaces, responsive design architectures, and interactive web tools with meticulous attention to micro-interactions.`,
-      `I love working at the intersection of aesthetic design and technical precision—building experiences that feel seamless, tactile, and natural to interact with across modern platforms.`,
+      `Hey! I'm a B.Tech IT student, developer, and curious mind who loves turning ideas into digital experiences.`,
+      `Currently exploring web development, AI, and software engineering while building projects that blend creativity with code.`,
+      `Beyond the screen, I'm into photography 📸, travelling, music, and creative pursuits. Always learning, always building, and always curious about what's next.`,
     ],
   },
   {
@@ -24,7 +25,13 @@ const notesData = [
     date: 'September 12, 2024 at 4:15 PM',
     heading: '⚡ Future Goals',
     body: [
-      `Placeholder content for future goals — roadmap, architecture decisions, and things I'm working toward.`,
+      `Future me has some serious work to do...`,
+      `☐ Build my own AI assistant 🤖`,
+      `☐ Master RAG, LangChain & LangGraph`,
+      `☐ Create cool AI agents & projects`,
+      `☐ Learn system design`,
+      `☐ Contribute to open source 🌐`,
+      `☐ Build something that feels like the future 🚀`,
     ],
   },
 ]
